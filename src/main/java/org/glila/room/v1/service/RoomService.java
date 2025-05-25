@@ -2,6 +2,7 @@ package org.glila.room.v1.service;
 
 
 import org.glila.room.v1.entity.Room;
+import org.glila.room.v1.exception.ResourceNotFoundException;
 import org.glila.room.v1.repository.RoomRepository;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,6 @@ public class RoomService {
                     room.setPassword(updatedRoom.getPassword());
                     room.setMaxUsers(updatedRoom.getMaxUsers());
                     return roomRepository.save(room);
-                }).orElseThrow(() -> new RuntimeException("Room not found"));
+                }).orElseThrow(() -> new ResourceNotFoundException("Room not found"));
     }
 }
