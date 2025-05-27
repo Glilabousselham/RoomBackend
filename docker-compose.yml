@@ -1,5 +1,7 @@
 version: '3.8'
 
+name: room
+
 services:
   app:
     build: .
@@ -11,6 +13,8 @@ services:
       - .env
     depends_on:
       - db
+    networks:
+      - room-net
 
   db:
     image: mysql:8.0
@@ -25,6 +29,13 @@ services:
     #  - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - room-net
 
 volumes:
   db_data:
+
+
+networks:
+  room-net:
+    driver: bridge
