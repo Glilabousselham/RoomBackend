@@ -1,17 +1,14 @@
-# Use official Java 21 JDK image
-FROM eclipse-temurin:21-jdk-alpine
-
-# Metadata
-LABEL maintainer="yourname@example.com"
-
-# Set working directory
+# Stage 1: Build the app
+FROM maven:3.9.6-eclipse-temurin-21 AS builder
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Copy the JAR file
-COPY target/*.jar app.jar
 
-# Expose the port your Spring Boot app runs on
+# Stage 2: Run the app
+FROM eclipse-temurin:21-jdk-alpine
+WORKDIR /app
+COPY --from=builder /app/target/*.jar app.jar
 EXPOSE 11000
-
-# Run the JAR
 ENTRYPOINT ["java", "-jar", "app.jar"]
